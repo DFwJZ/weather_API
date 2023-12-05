@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather Dashboard</title>
+    <!-- Add any stylesheets or scripts here -->
+  </head>
+  <body>
+    <h1>Weather Dashboard</h1>
+    <form action="/" method="post">
+      <input type="text" name="city" placeholder="Enter a city" />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <% if (weatherData) { %>
+    <h2>Weather in <%= weatherData.location.name %>:</h2>
+    <p>Temperature: <%= weatherData.data.values.temperature %>°F</p>
+    <!-- Add more weather details here -->
+    <% } else if (error) { %>
+    <p>Error: <%= error %></p>
+    <% } %>
+
+    <h2>Request History (Total Requests: <%= totalDocuments %>)</h2>
+    <ul>
+      <% history.forEach(function(record) { %>
+      <li><%= record.city %> - <%= record.date.toISOString() %></li>
+      <% }) %>
+    </ul>
+  </body>
+</html>
