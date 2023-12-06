@@ -1,8 +1,10 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
 const getWeatherData = require("../public/javascripts/fetch_weather_data.js");
 const mu = require("../db/MongoUtils.js");
 const GOOGLE_PLACES_API_KEY = require("../secret/_google_apikey.js");
+const pushToSlack = require("../public/javascripts/slack_bot.js");
 
 // Route to display the form
 router.get("/", async function (req, res, next) {
@@ -15,7 +17,6 @@ router.get("/", async function (req, res, next) {
       error: null,
       history: history,
       totalDocuments: totalDocuments,
-      apiKey: GOOGLE_PLACES_API_KEY,
     });
   } catch (error) {
     console.error(error);
@@ -32,16 +33,20 @@ router.post("/", async (req, res) => {
     // const weatherData = await getWeatherData(city);
     const weatherData = await getWeatherData(latitude, longitude);
 
+    if (weatherData) {
+      await pushToSlack(weatherData, city);
+    }
+
     await mu.insertRequest(city);
     const history = await mu.findAllRequests();
     const totalDocuments = await mu.countRequests(); // Get the updated count
 
     res.render("index", {
       weatherData: weatherData,
+      city: city,
       error: null,
       history: history,
       totalDocuments: totalDocuments,
-      apiKey: GOOGLE_PLACES_API_KEY,
     });
   } catch (error) {
     const history = await mu.findAllRequests();
@@ -52,8 +57,18 @@ router.post("/", async (req, res) => {
       error: "Error fetching weather data",
       history: history,
       totalDocuments: totalDocuments,
-      apiKey: GOOGLE_PLACES_API_KEY,
     });
+  }
+});
+
+router.get("/google-maps-api", async (req, res) => {
+  const url = `https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&key=${GOOGLE_PLACES_API_KEY}`;
+  try {
+    const response = await axios.get(url);
+    res.send(response.data);
+  } catch (error) {
+    console.error("Error fetching from Google Maps API:", error);
+    res.status(500).send("Error fetching data");
   }
 });
 

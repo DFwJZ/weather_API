@@ -1,16 +1,14 @@
 const axios = require("axios");
 const SLACK_TOKEN = require("../../secret/_slack_token.js");
-const getWeatherData = require("./fetch_weather_data.js");
+const { resource } = require("../../app.js");
 
-async function pushToSlack() {
-  const weatherData = await getWeatherData(); // Fetch the weather data
+async function pushToSlack(weatherData, city) {
+  const temperature = weatherData.data.values.temperature;
+  console.log(`The current temperature in ${city} is ${temperature}°F.`);
+  const message = `The current temperature in ${city} is ${temperature}°F.`;
 
-  if (weatherData) {
-    const temperature = weatherData.data.values.temperature;
-    console.log(`The current temperature in Portland is ${temperature}°F.`);
-    const message = `The current temperature in Portland is ${temperature}°F.`; // Format your message
-
-    const url = "https://slack.com/api/chat.postMessage";
+  const url = "https://slack.com/api/chat.postMessage";
+  try {
     const res = await axios.post(
       url,
       {
@@ -21,11 +19,12 @@ async function pushToSlack() {
       },
       { headers: { authorization: `Bearer ${SLACK_TOKEN}` } }
     );
-
-    // console.log("Done", res.data);
-  } else {
-    console.log("No weather data found.");
+    console.log("Message sent to Slack", res.data.ok);
+  } catch (err) {
+    console.error("Error sending message to Slack:", err);
   }
 }
 
-pushToSlack().catch((err) => console.log(err));
+module.exports = pushToSlack;
+
+// pushToSlack().catch((err) => console.log(err));

@@ -18,15 +18,12 @@
         <button type="submit">Get Weather</button>
       </form>
     </div>
-    <script>
-      const apiKey = "<%= apiKey %>";
-    </script>
 
     <!-- Link to the external JavaScript file -->
     <script src="./javascripts/address_resolution.js" defer></script>
 
     <% if (weatherData) { %>
-    <h2>Weather in <%= weatherData.location.name %>:</h2>
+    <h2>Weather in <%= city %>:</h2>
     <p>Temperature: <%= weatherData.data.values.temperature %>°F</p>
     <!-- Add more weather details here -->
     <% } else if (error) { %>

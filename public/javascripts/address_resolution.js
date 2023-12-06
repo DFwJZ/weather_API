@@ -39,7 +39,7 @@ function getAddress() {
 
 function loadGoogleMapsApi() {
   const script = document.createElement("script");
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initAutocomplete`;
+  script.src = `/google-maps-api`;
   document.head.appendChild(script);
 }
 

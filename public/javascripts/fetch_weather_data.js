@@ -3,7 +3,7 @@ const axios = require("axios");
 const TOMORROWIO_API_KEY = require("../../secret/_tomorrowio_apikey.js");
 const BASE_URL = "https://api.tomorrow.io/v4";
 
-const getWeatherData = async (latitude, longitude) => {
+const getWeatherData = async (latitude = 15, longitude = 12) => {
   console.log("Fetching weather data...");
   try {
     const response = await axios.get(`${BASE_URL}/weather/realtime`, {
@@ -14,7 +14,7 @@ const getWeatherData = async (latitude, longitude) => {
         // Add any other parameters you need here
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
