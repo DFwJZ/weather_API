@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const getWeatherData = require("../fetch_weather_data"); // adjust the path as necessary
+const getWeatherData = require("../public/javascripts/fetch_weather_data.js");
 const mu = require("../db/MongoUtils.js");
+const GOOGLE_PLACES_API_KEY = require("../secret/_google_apikey.js");
 
 // Route to display the form
 router.get("/", async function (req, res, next) {
@@ -13,7 +14,8 @@ router.get("/", async function (req, res, next) {
       weatherData: null,
       error: null,
       history: history,
-      totalDocuments: totalDocuments, // Include totalDocuments here
+      totalDocuments: totalDocuments,
+      apiKey: GOOGLE_PLACES_API_KEY,
     });
   } catch (error) {
     console.error(error);
@@ -23,9 +25,13 @@ router.get("/", async function (req, res, next) {
 
 // Route to handle form submission
 router.post("/", async (req, res) => {
-  const city = req.body.city || "Portland, OR";
+  // const city = req.body.city || "Portland";
+  console.log("request body: ", req.body);
+  const { city, latitude, longitude } = req.body;
   try {
-    const weatherData = await getWeatherData(city);
+    // const weatherData = await getWeatherData(city);
+    const weatherData = await getWeatherData(latitude, longitude);
+
     await mu.insertRequest(city);
     const history = await mu.findAllRequests();
     const totalDocuments = await mu.countRequests(); // Get the updated count
@@ -34,7 +40,8 @@ router.post("/", async (req, res) => {
       weatherData: weatherData,
       error: null,
       history: history,
-      totalDocuments: totalDocuments, // Include totalDocuments here
+      totalDocuments: totalDocuments,
+      apiKey: GOOGLE_PLACES_API_KEY,
     });
   } catch (error) {
     const history = await mu.findAllRequests();
@@ -44,7 +51,8 @@ router.post("/", async (req, res) => {
       weatherData: null,
       error: "Error fetching weather data",
       history: history,
-      totalDocuments: totalDocuments, // Include totalDocuments here
+      totalDocuments: totalDocuments,
+      apiKey: GOOGLE_PLACES_API_KEY,
     });
   }
 });

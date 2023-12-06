@@ -1,5 +1,5 @@
 const axios = require("axios");
-const slackToken = require("./secret/_slack_token.js");
+const SLACK_TOKEN = require("../../secret/_slack_token.js");
 const getWeatherData = require("./fetch_weather_data.js");
 
 async function pushToSlack() {
@@ -19,7 +19,7 @@ async function pushToSlack() {
         username: "Peanut Bot",
         icon_emoji: ":bug:",
       },
-      { headers: { authorization: `Bearer ${slackToken}` } }
+      { headers: { authorization: `Bearer ${SLACK_TOKEN}` } }
     );
 
     // console.log("Done", res.data);

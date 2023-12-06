@@ -2,14 +2,28 @@
 <html>
   <head>
     <title>Weather Dashboard</title>
-    <!-- Add any stylesheets or scripts here -->
   </head>
   <body>
     <h1>Weather Dashboard</h1>
-    <form action="/" method="post">
-      <input type="text" name="city" placeholder="Enter a city" />
-      <button type="submit">Get Weather</button>
-    </form>
+    <div id="locationField">
+      <form action="/" method="post" id="weather-form">
+        <input
+          id="autocomplete"
+          type="text"
+          name="city"
+          placeholder="Enter a city"
+        />
+        <input type="hidden" id="latitude" name="latitude" />
+        <input type="hidden" id="longitude" name="longitude" />
+        <button type="submit">Get Weather</button>
+      </form>
+    </div>
+    <script>
+      const apiKey = "<%= apiKey %>";
+    </script>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="./javascripts/address_resolution.js" defer></script>
 
     <% if (weatherData) { %>
     <h2>Weather in <%= weatherData.location.name %>:</h2>
