@@ -4,19 +4,18 @@ This project is a weather dashboard that allows users to request weather data fo
 
 ## Features
 
-- Fetch and display weather data for any specified city.
-- Store request history in MongoDB.
-- Display request history on the dashboard.
-- Send weather data notifications to a Slack channel.
+- Real-time Weather Data: Fetch and display current weather conditions for any city.
+- Request History: Store and display a history of weather data requests in MongoDB.
+- Slack Notifications: Automatically send weather updates to a Slack channel.
+- User-friendly Dashboard: Easy-to-navigate web interface for interacting with the application.
 
 ## Technologies Used
 
-- Node.js
-- Express.js
-- EJS (Embedded JavaScript templates)
-- MongoDB
-- Axios
-- Slack API
+- Backend: Node.js, Express.js
+- Semi-Frontend: EJS (Embedded JavaScript templates)
+- Database: MongoDB
+- HTTP Client: Axios for API requests
+- APIs: Tomorrow.io for weather data, Slack API for notification, google places API for extracting geographical information.
 
 ## Setup and Installation
 
@@ -38,7 +37,7 @@ This project is a weather dashboard that allows users to request weather data fo
     ```
 2. Navigate to the project directory:
     ```bash
-    cd weather-dashboard-slack-integration
+    cd weather_API
     ```
 3. Install dependencies:
    ```bash
@@ -46,10 +45,7 @@ This project is a weather dashboard that allows users to request weather data fo
     ```
 4. Set up your own API keys and tokens:
 
-    Place your Tomorrow.io API key in 
-    `./secret/_tomorrowio_apikey.js`
-    Place your Slack API token in 
-    `./secret/_slack_token.js`
+    Place all tokens and apiKeys in `.env` file.
 
 ### Running the Application
 1. Start the server
@@ -58,13 +54,17 @@ This project is a weather dashboard that allows users to request weather data fo
     ```
 2. Access the web application at `http://localhost:3000/`
 
-3. To send wather data to Slack, run:
+3. To send default weather data to Slack through CLI, uncomment 
+    ```javascript
+    pushToSlack().catch((err) => console.log(err));
+    ``` 
+    then run below to send the weather info to slack:
     ```bash
     node slack_bot.js
     ```
 
 ### Usage
 
-- Enter a city name in the input field on the dashboard and submit to see the current weather data for that city.
-- The dashboard displays a history of the last 10 weather data requests.
-- The `slack_bot.js` script sends the current weather data of Portland to a specified Slack channel.
+- Dashboard: Enter a city name to view its current weather.
+- History: View the last 10 weather data requests on the dashboard.
+- Slack Bot: Customize `slack_bot.js` to change the default city or Slack channel for notifications.
