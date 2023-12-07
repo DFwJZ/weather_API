@@ -1,8 +1,9 @@
+require("dotenv").config();
 const axios = require("axios");
-const SLACK_TOKEN = require("../../secret/_slack_token.js");
-const { resource } = require("../../app.js");
+const SLACK_TOKEN = process.env.SLACK_TOKEN;
 
 async function pushToSlack(weatherData, city) {
+  // Function to send message to Slack
   const temperature = weatherData.data.values.temperature;
   console.log(`The current temperature in ${city} is ${temperature}°F.`);
   const message = `The current temperature in ${city} is ${temperature}°F.`;

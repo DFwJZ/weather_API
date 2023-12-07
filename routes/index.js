@@ -1,10 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 const getWeatherData = require("../public/javascripts/fetch_weather_data.js");
 const mu = require("../db/MongoUtils.js");
-const GOOGLE_PLACES_API_KEY = require("../secret/_google_apikey.js");
 const pushToSlack = require("../public/javascripts/slack_bot.js");
+const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
 // Route to display the form
 router.get("/", async function (req, res, next) {
@@ -61,6 +62,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Route to serve the Google Maps API script securely, proxy to filter API key
 router.get("/google-maps-api", async (req, res) => {
   const url = `https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&key=${GOOGLE_PLACES_API_KEY}`;
   try {

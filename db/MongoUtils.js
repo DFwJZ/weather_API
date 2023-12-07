@@ -47,6 +47,7 @@ const MongoUtils = () => {
   mu.insertRequest = async (city) => {
     const db = await mu.connect();
     const collection = db.collection(colName);
+    // insert the queried city and the current date
     return collection.insertOne({ city, date: new Date() });
   };
 
