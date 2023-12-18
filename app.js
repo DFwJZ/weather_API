@@ -46,8 +46,8 @@ app.use(apiLimiter); // apply to all requests
 
 // Start the server
 console.log("Starting server...");
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-});
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}/`);
+// });
 module.exports = app;
