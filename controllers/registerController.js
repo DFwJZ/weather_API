@@ -19,7 +19,7 @@ const handleNewUser = async (req, res) => {
   if (duplicate)
     return res
       .status(409)
-      .json({ message: "Username and password are required." }); //Conflict
+      .json({ message: "Username existed, use a different username." }); //Conflict
   try {
     //encrypt the password
     const hashedPwd = await bcrypt.hash(pwd, 10);
