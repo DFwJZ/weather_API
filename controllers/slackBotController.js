@@ -18,7 +18,8 @@ async function pushToSlack(weatherData, city) {
         username: "Peanut Bot",
         icon_emoji: ":bug:",
       },
-      { headers: { authorization: `Bearer ${SLACK_TOKEN}` } }
+      { headers: { authorization: `Bearer ${SLACK_TOKEN}` } },
+      { timeout: 5000 }
     );
     console.log("Message sent to Slack", res.data.ok);
   } catch (err) {

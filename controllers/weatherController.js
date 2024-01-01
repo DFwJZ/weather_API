@@ -1,9 +1,9 @@
 // controllers/weatherController.js
 
-const getWeatherData = require("../public/javascripts/fetch_weather_data");
+const getWeatherData = require("./fetchWeatherController");
 const axios = require("axios");
 const mu = require("../db/MongoUtils");
-const pushToSlack = require("../public/javascripts/slack_bot");
+const pushToSlack = require("./slackBotController");
 const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
 // Function to display the form
@@ -64,7 +64,7 @@ const handleSubmit = async (req, res) => {
 const googleMapsApi = async (req, res) => {
   const url = `https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&key=${GOOGLE_PLACES_API_KEY}`;
   try {
-    const response = await withTimeout(axios.get(url), 5000);
+    const response = await axios.get(url, { timout: 5000 });
     res.send(response.data);
   } catch (error) {
     console.error("Error fetching from Google Maps API:", error);
@@ -76,20 +76,6 @@ const googleMapsApi = async (req, res) => {
 function isValidCityName(city) {
   const regexPattern = /^[a-zA-Z\s,.'-]+$/;
   return regexPattern.test(city);
-}
-
-// Customized Timeout Function
-function withTimeout(promise, ms) {
-  let timeoutId;
-  const timeoutPromise = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => {
-      reject(new Error(`Timed out after ${ms} ms.`));
-    }, ms);
-  });
-
-  return Promise.race((promise, timeoutPromise)).finally(() => {
-    clearTimeout(timeoutId); // needs to be cleared to avoid memory leaks
-  });
 }
 
 module.exports = {
